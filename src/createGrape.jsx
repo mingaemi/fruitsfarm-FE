@@ -2,8 +2,8 @@ import React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './createGrape.css';
-/*
 import config from './config';
+/*
 import { Link } from 'react-router-dom';
 
 */
@@ -18,11 +18,41 @@ const CreateGrape = () => {
     setstartDate(e.target.value);
   };
 
-  const handleSubmit = () => {
-    if (goal && cheer && startDate) {
-      navigate('/HTGrape');
-    } else {
+  const handleSubmit = async () => {
+    if (!goal && !cheer && !startDate) {
       alert('모든 항목을 입력해 주세요!');
+    }
+
+    const requestBody = {
+      type: 'grape',
+      achievement: goal,
+      motivation: cheer,
+      startDate: startDate,
+    };
+
+    try {
+      const response = await fetch(
+        `${config.serverURL}/api/v1/habit-trackers`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify(requestBody),
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        const habitTrackerId = result.data.habitTrackerId;
+        navigate(`/HTGrape?id=${habitTrackerId}`);
+      } else {
+        alert('생성에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('요청 중 오류 발생:', error);
     }
   };
 

@@ -50,10 +50,10 @@ const Join = () => {
       const data = await response.json();
 
       if (data.success) {
-        alert('회원가입 완료');
+        alert('회원가입 성공했습니다.');
         navigate('/login');
       } else {
-        alert(data.message || '회원가입에 실패했습니다.');
+        alert(data.data || '회원가입에 실패했습니다.');
       }
     } catch (error) {
       console.log('서버 오류', error);
