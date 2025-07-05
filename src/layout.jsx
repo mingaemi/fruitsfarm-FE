@@ -10,16 +10,18 @@ const Layout = () => {
     try {
       const response = await fetch(config.serverURL + '/api/v1/logout', {
         method: 'POST',
-        headers: { 'Content-Type': 'applicatin/json' },
+        headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
       });
+
+      const data = await response.json();
 
       if (!response.ok) {
         console.error('로그아웃 실패');
         throw new Error('로그아웃 실패');
       }
 
-      alert('로그아웃 되었습니다.');
+      alert(data.message);
       navigate('/login');
     } catch (error) {
       console.log('오류가 발생했습니다.', error);
